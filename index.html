@@ -4,9 +4,62 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Sports Coach</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 40px auto; 
+            padding: 20px;
+        }
+        label { 
+            font-weight: bold; 
+            margin-top: 10px; 
+            display: block; 
+        }
+        input, select, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+        }
+        button { 
+            margin-top: 20px; 
+            background: black; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+        #result {
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+
     <h1>AI Sports Coach</h1>
-    <p>Velkommen! Dette er starten på prosjektet ditt.</p>
+    <p>Fyll inn informasjonen din:</p>
+
+    <form id="coachForm">
+        <label for="sport">Idrett</label>
+        <select id="sport">
+            <option value="løping">Løping</option>
+            <option value="sykling">Sykling</option>
+            <option value="styrke">Styrke</option>
+            <option value="triatlon">Triatlon</option>
+        </select>
+
+        <label for="goal">Mål</label>
+        <input id="goal" placeholder="F.eks. 5km under 25 min">
+
+        <label for="hours">Timer per uke</label>
+        <input id="hours" type="number" min="1" max="20">
+
+        <button type="submit">Send inn</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script src="script.js"></script>
 </body>
 </html>
