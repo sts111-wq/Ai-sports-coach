@@ -1,14 +1,35 @@
+// Sett inn Supabase-detaljene dine her:
+const SUPABASE_URL = "https://jradbtzebvckrdzvykbn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_OGbLv8JL-eCOOoiU_Z6FlQ_iQnnEQpG";
+
+// Lag Supabase-klient
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Når skjemaet sendes inn:
-document.getElementById("coachForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // Hindrer at siden refresher
+document.getElementById("coachForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
     const sport = document.getElementById("sport").value;
     const goal = document.getElementById("goal").value;
     const hours = document.getElementById("hours").value;
 
-    // Lag en enkel tekst basert på det brukeren har skrevet
+    // Vis tekst på siden
     const output = `Takk! Du trener ${sport}, målet ditt er "${goal}", og du trener ${hours} timer per uke.`;
-
-    // Vis teksten under skjemaet
     document.getElementById("result").textContent = output;
+
+    // Lagre i Supabase
+    const { data, error } = await db
+        .from("form_submissions")
+        .insert([
+            { sport: sport, goal: goal, hours_per_week: Number(hours) }
+        ]);
+
+    if (error) {
+        console.error("Feil ved lagring:", error);
+        alert("Noe gikk galt med lagringen i Supabase.");
+    } else {
+        console.log("Lagret:", data);
+    }
 });
+
+
