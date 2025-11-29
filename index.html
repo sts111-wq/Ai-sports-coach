@@ -2,67 +2,223 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Sports Coach</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Enkel innebygd styling -->
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            max-width: 600px; 
-            margin: 40px auto; 
-            padding: 20px;
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-        label { 
-            font-weight: bold; 
-            margin-top: 10px; 
-            display: block; 
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f5fb;
+            color: #111827;
         }
-        input, select, button { 
-            width: 100%; 
-            padding: 10px; 
-            margin-top: 5px; 
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
         }
-        button { 
-            margin-top: 20px; 
-            background: black; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
+
+        .card {
+            background: #ffffff;
+            max-width: 520px;
+            width: 100%;
+            padding: 28px 28px 32px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
         }
-        #result {
-            margin-top: 20px;
-            color: green;
-            font-weight: bold;
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 0.02em;
+        }
+
+        .subtitle {
+            margin: 4px 0 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        form {
+            margin-top: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 11px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            margin-bottom: 14px;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            background: #f9fafb;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+            background: #ffffff;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            margin-top: 6px;
+            padding: 11px 14px;
+            border-radius: 999px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+            transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+        }
+
+        button[type="submit"]:hover {
+            filter: brightness(1.03);
+            box-shadow: 0 10px 24px rgba(22, 163, 74, 0.45);
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: -6px;
+            margin-bottom: 14px;
+        }
+
+        .result {
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #16a34a;
+            line-height: 1.4;
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 22px 18px 26px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="page-wrapper">
+        <div class="card">
+            <div class="logo-row">
+                <div class="logo-icon">AI</div>
+                <div>
+                    <h1>AI Sports Coach</h1>
+                    <p class="subtitle">Få et smart startpunkt for treningen din på under 10 sekunder.</p>
+                </div>
+            </div>
 
-    <h1>AI Sports Coach</h1>
-    <p>Fyll inn informasjonen din:</p>
+            <form id="coachForm">
+                <label for="sport">Idrett</label>
+                <select id="sport" required>
+                    <option value="Løping">Løping</option>
+                    <option value="Sykling">Sykling</option>
+                    <option value="Styrke">Styrketrening</option>
+                    <option value="Triatlon">Triatlon</option>
+                    <option value="Fotball">Fotball</option>
+                </select>
 
-    <form id="coachForm">
-        <label for="sport">Idrett</label>
-        <select id="sport">
-            <option value="løping">Løping</option>
-            <option value="sykling">Sykling</option>
-            <option value="styrke">Styrke</option>
-            <option value="triatlon">Triatlon</option>
-        </select>
+                <label for="goal">Mål</label>
+                <input
+                    type="text"
+                    id="goal"
+                    placeholder="Eks: 5 km under 30 min, FTP 250 W, ned 5 kg..."
+                    required
+                />
+                <p class="helper-text">Jo mer konkret du er, jo enklere blir det å lage en god plan senere.</p>
 
-        <label for="goal">Mål</label>
-        <input id="goal" placeholder="F.eks. 5km under 25 min">
+                <label for="hours">Timer per uke</label>
+                <input
+                    type="number"
+                    id="hours"
+                    min="1"
+                    max="30"
+                    placeholder="F.eks. 3"
+                    required
+                />
 
-        <label for="hours">Timer per uke</label>
-        <input id="hours" type="number" min="1" max="20">
+                <button type="submit">Send inn</button>
+            </form>
 
-        <button type="submit">Send inn</button>
-    </form>
+            <div id="result" class="result"></div>
 
-    <p id="result"></p>
+            <p class="footer-note">
+                Dette er en tidlig prototype. Dataene brukes til å teste AI Sports Coach-konseptet.
+            </p>
+        </div>
+    </div>
 
+    <!-- Supabase + egen logikk -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>
-
-
