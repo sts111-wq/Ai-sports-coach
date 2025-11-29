@@ -1,6 +1,6 @@
 // 1. Supabase-detaljer
 const supabaseUrl = "https://jradbtzebvckrdzvykbn.supabase.co";
-const supabaseKey = "sb_secret_lXz6UdLpT4ejQ0Fn0PiQLw_mnmhZgFI";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyYWRidHplYnZja3JkenZ5a2JuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyMjU2MjMsImV4cCI6MjA3OTgwMTYyM30.i8e9XV8wP9-cUPJiDc4W2Mlz9ZEAXSKYkVelmH10ZCk";
 
 // 2. Lag Supabase-klient fra CDN (window.supabase kommer fra index.html)
 const { createClient } = window.supabase;
@@ -41,4 +41,5 @@ form.addEventListener("submit", async function (e) {
         alert("Lagret i database ✅");
     }
 });
+
 
