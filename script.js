@@ -1,57 +1,88 @@
-// Enkel test-versjon av script.js
-// 1) Lagrer i Supabase
-// 2) Viser en tydelig test-tekst i AI-boksen
+// === KONFIGURASJON FOR SUPABASE ===
+// Sett inn din faktiske URL og publishable key (sb_publishable_...)
 
-// === SUPABASE-KONFIG ===
 const supabaseUrl = "https://jradbtzebvckrdzvykbn.supabase.co";
 const supabaseKey = "sb_publishable_OGbLv8JL-etcetc";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// === HENT HTML-ELEMENTER ===
+// === HENT ELEMENTER FRA HTML ===
 const form = document.getElementById("coachForm");
 const resultEl = document.getElementById("result");
 const aiPlanEl = document.getElementById("ai-plan");
 
-// Bare for debugging:
-console.log("script.js lastet", { form, resultEl, aiPlanEl });
-
-form.addEventListener("submit", async function (e) {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const sport = document.getElementById("sport").value;
   const goal = document.getElementById("goal").value;
   const hours = document.getElementById("hours").value;
 
-  // 1) Vanlig grønn tekst
-  const output = `Takk! Du trener ${sport}, målet ditt er "${goal}", og du trener ${hours} timer per uke.`;
-  resultEl.textContent = output;
+  // 1. Vis grunn-tekst
+  resultEl.textContent = `Takk! Du trener ${sport}, målet ditt er "${goal}", og du trener ${hours} timer per uke.`;
 
-  // 2) TEST: skriv noe i AI-boksen uansett
-  aiPlanEl.textContent =
-    "TEST: Hvis du ser denne teksten etter at du har sendt inn skjemaet, fungerer script.js og ai-plan-diven.";
+  // Nullstill AI-tekst
+  if (aiPlanEl) {
+    aiPlanEl.textContent = "Lager et forslag til treningsplan basert på målene dine...";
+  }
 
-  // 3) Lagre i Supabase (samme som før)
+  // 2. LAGRE I SUPABASE
   try {
     const { data, error } = await supabase
       .from("form_submissions")
       .insert([
         {
-          sport: sport,
-          goal: goal,
+          sport,
+          goal,
           hours_per_week: Number(hours),
         },
       ]);
 
     if (error) {
       console.error("Supabase-feil:", error);
-      alert("Feil ved lagring i Supabase: " + error.message);
+      alert("Feil ved lagring i database: " + error.message);
     } else {
       console.log("Lagret i Supabase:", data);
+      // du kan beholde eller fjerne alert
       alert("Lagret i database ✅");
     }
   } catch (err) {
     console.error("Uventet Supabase-feil:", err);
     alert("Uventet feil ved lagring i database");
+  }
+
+  // 3. HENT AI-PLAN FRA /api/generate-plan
+  try {
+    const response = await fetch("/api/generate-plan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sport, goal, hours }),
+    });
+
+    if (!response.ok) {
+      const txt = await response.text();
+      console.error("Feil fra /api/generate-plan:", txt);
+      if (aiPlanEl) {
+        aiPlanEl.textContent =
+          "Klarte ikke å lage treningsplan akkurat nå (feil " + response.status + ").";
+      }
+      return;
+    }
+
+    const json = await response.json();
+
+    if (json.plan && aiPlanEl) {
+      aiPlanEl.textContent = json.plan;
+    } else if (aiPlanEl) {
+      aiPlanEl.textContent = "Fikk svar, men ingen plan ble generert.";
+    }
+  } catch (err) {
+    console.error("Feil ved kall til generate-plan:", err);
+    if (aiPlanEl) {
+      aiPlanEl.textContent =
+        "Det oppsto en feil når vi prøvde å lage treningsplanen din.";
+    }
   }
 });
