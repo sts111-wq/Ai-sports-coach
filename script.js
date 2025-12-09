@@ -2,7 +2,7 @@
 // Sett inn din faktiske URL og publishable key (sb_publishable_...)
 
 const supabaseUrl = "https://jradbtzebvckrdzvykbn.supabase.co";
-const supabaseKey = "sb_publishable_OGbLv8JL-etcetc";
+const supabaseKey = "sb_publishable_OGbLv8JL-eCOOoiU_Z6FlQ_iQnnEQpG";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -86,3 +86,4 @@ form.addEventListener("submit", async (e) => {
     }
   }
 });
+
